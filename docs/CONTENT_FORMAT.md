@@ -109,10 +109,37 @@ window.PAPERS.push(window.__PACK__);
 
 无 `quiz` 的单元直接放行（用于纯速查卡）。
 
-### 公式约定（KaTeX，非完整 LaTeX）
+### 公式约定（内置 KaTeX 是精简版，非完整 LaTeX）
 
-- 支持：`\frac \sqrt \sum \prod \langle \rangle \mathbb \mathrm \mathcal \| \le \ge \to \mapsto \in \subset \inf \sup \max \min \ldots \cdots`
-- **不支持**：`\dots`（用 `\ldots` 或 `\cdots`）、`\overset`/`\underset`、`\text{中文}`（CJK 放到公式外）、`align` 环境（改用 `$$…$$` 分段）
+内置的 `app/assets/katex/` 是离线精简构建，比完整 KaTeX 少了若干宏。校验器按下面这张表拦截（`packages/schema/schema.mjs` 的 `UNSUPPORTED_MACROS` 是唯一事实来源）：
+
+- 支持：`\frac \tfrac \dfrac \sqrt \sum \prod \int \langle \rangle \mathbb \mathrm \mathbf \mathcal \left\| \right\| \le \ge \to \mapsto \in \setminus \subset \inf \sup \max \min \ldots \cdots \bigl( \bigr)`，以及 `aligned` 环境、`\text{English}`
+- **不支持**（校验会直接报错）：
+
+| 写法 | 改成 |
+|---|---|
+| `\dots` | `\ldots` / `\cdots` |
+| `\boxed{X}` / `\fbox{X}` / `\colorbox{c}{X}` | 去掉外框，只留 `X` |
+| `\tag{n}` | 把编号写成正文文字 |
+| `\operatorname{X}` / `\mathop{X}` | `\mathrm{X}` |
+| `\bm{X}` / `\boldsymbol{X}` | `\mathbf{X}` |
+| `\underbrace{X}_{Y}` | `(X)_{Y}` |
+| `\overbrace{X}^{Y}` | `(X)^{Y}` |
+| `\substack{X}` | 拆成多行公式 |
+| `\overset` / `\underset` / `\label` / `\ref` | 改写为文字或去掉 |
+| `align` 环境 | `$$…$$` 分段，或改用 `aligned` |
+| `\text{中文}` | 中文移到 `$…$` 之外 |
+
+前 11 类可以用工具批量改：
+
+```bash
+npm run fix                 # 修 content/ 下所有读包
+npm run fix -- content/foo  # 只修一个
+npm run fix -- content/foo --dry   # 只看会改什么
+```
+
+`\text{中文}`、`\overset` 这类改法取决于语义（中文该放在公式哪个位置），工具不碰，只留报错让你手改。
+
 - 中文一律写在 `$…$` 之外。
 - 源码里必须用 `String.raw` 模板字符串，否则 `\f`、`\n`、`\t` 会被 JS 转义。
 
@@ -120,6 +147,7 @@ window.PAPERS.push(window.__PACK__);
 
 ```bash
 npm run validate     # 严格校验（KaTeX throwOnError + 结构检查）
+npm run fix          # 自动修常见不可渲染写法（\dots / \boxed / \operatorname …）
 npm run build        # content/**  ->  app/packs.js
 npm test             # node:test：schema 校验 + 构建一致性
 ```

@@ -7,7 +7,7 @@
 [![License: MIT](https://img.shields.io/badge/license-MIT-2563eb?style=flat-square)](LICENSE)
 [![Node](https://img.shields.io/badge/node-%3E%3D18-4b5563?style=flat-square)](package.json)
 
-[快速开始](#快速开始) · [核心想法](#核心想法) · [读包格式](docs/CONTENT_FORMAT.md) · [架构](docs/ARCHITECTURE.md) · [DSH 插件](packages/plugin-dsh/README.md) · [路线图](ROADMAP.md)
+[快速开始](#快速开始) · [使用指南](docs/USAGE.md) · [核心想法](#核心想法) · [读包格式](docs/CONTENT_FORMAT.md) · [架构](docs/ARCHITECTURE.md) · [DSH 插件](packages/plugin-dsh/README.md) · [路线图](ROADMAP.md)
 
 </div>
 
@@ -60,16 +60,19 @@ npm run build
 npm start                # http://127.0.0.1:8788/app/
 ```
 
-只有 Node ≥ 18，**没有依赖要装**（`npm install` 不需要）。仓库默认 0 个读包时，页面会显示引导步��，不会报错。
+只有 Node ≥ 18，**没有依赖要装**（`npm install` 不需要）。仓库默认 0 个读包时，页面会显示引导页，不会报错。
+
+一步步的操作说明（建包、界面操作、配 AI、DSH 插件、常见问题）见 **[docs/USAGE.md](docs/USAGE.md)**。
 
 其他命令：
 
 ```bash
 npm run build      # content/<pack>/**  ->  app/packs.js（含内容校验）
 npm run validate   # 只校验，不写文件
+npm run fix        # 自动修 KaTeX 渲染不了的常见写法（\dots / \boxed / \operatorname …）
 npm run dev        # 监听 content/ 变化自动重建
-npm test           # node:test（schema / 构建 / 导入器）
-npm run check      # build --check + test + 插件契约校验
+npm test           # node:test（schema / 构建 / 导入器 / 公式自动修复）
+npm run check      # build --check + 全部测试 + 插件契约校验
 ```
 
 **不想跑服务？** 直接双击 `app/index.html` 用 `file://` 打开也能读全部内容与批注；只有 AI 面板需要本地服务（浏览器不能安全持有 API Key）。

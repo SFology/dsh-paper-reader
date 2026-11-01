@@ -20,6 +20,7 @@
     "pretest": "node scripts/build.mjs",
     "import": "node packages/importer/cli.mjs",
     "new": "node scripts/new-pack.mjs",
+    "fix": "node scripts/fix-math.mjs",
     "check": "node scripts/build.mjs --check && npm test && node packages/plugin-dsh/verify.mjs"
   },
   "files": [
