@@ -1,0 +1,13 @@
+# dsh-plugin-paper-reader 的 bundle patch
+#
+# 规则：
+#   - insert 一行 = 一个插件 entry
+#   - id 必须全局唯一且与包名一致
+#   - `id: 值` 这一行不能写行尾注释（预检正则抓不到 entry id）
+#   - name 写包名，DSH 按它解析 package.json 的 main（宿主半）
+#   - 因为 package.json 声明了 dsh.client，同一个包还会被模块系统扫成浏览器插件，
+#     由 /plugins/dsh-plugin-paper-reader/client.js 注入页面
+
+- insert:
+    - id: dsh-plugin-paper-reader
+      name: 'dsh-plugin-paper-reader'

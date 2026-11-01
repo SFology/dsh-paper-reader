@@ -1,0 +1,64 @@
+name: CI
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+  workflow_dispatch:
+
+concurrency:
+  group: ci-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  check:
+    name: 内容校验 + 测试 (Node ${{ matrix.node }})
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        node: ['18', '20', '22']
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: ${{ matrix.node }}
+
+      # 读包必须能通过 KaTeX 严格渲染 + 结构检查（不写文件）
+      - name: 校验读包
+        run: node scripts/build.mjs --check
+
+      # app/packs.js 是入库的生成物：源改了就必须重新生成并提交
+      - name: 生成物与源一致
+        run: |
+          node scripts/build.mjs
+          if ! git diff --quiet app/packs.js; then
+            echo "::error::app/packs.js 与 content/ 不一致，请在本地运行 npm run build 并提交"
+            git diff --stat app/packs.js
+            exit 1
+          fi
+
+      - name: 单元测试
+        run: npm test
+
+      - name: DSH 插件契约校验
+        run: node packages/plugin-dsh/verify.mjs
+
+  pack-format:
+    name: 读包格式文档与实现一致
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+      # 用模板生成一个读包 -> 构建 -> 校验 -> 还原，确保新用户照文档能走通
+      - name: 模板可用性
+        run: |
+          node scripts/new-pack.mjs --id smoke --title "CI 冒烟读包"
+          node scripts/build.mjs
+          node -e "const s=require('fs').readFileSync('app/packs.js','utf8'); if(!s.includes(\"id: 'smoke'\")) { console.error('模板读包没有出现在 packs.js 里'); process.exit(1); } console.log('模板读包已进入构建产物');"
+          git checkout -- app/packs.js
+          rm -rf content/smoke
+        shell: bash

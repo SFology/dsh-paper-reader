@@ -1,0 +1,113 @@
+name: 缺陷报告 / Bug Report
+description: 报告精读器、读包校验、本地服务或 DSH 插件的缺陷
+title: "[Bug] "
+labels: ["bug"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        感谢报告问题。提交前请先确认：`npm run validate` 是否通过、`app/index.html` 用 `file://` 直接打开是否复现。
+        **请勿粘贴 API Key、`config.local.json` 内容或完整的上游请求头。**
+
+  - type: textarea
+    id: what-happened
+    attributes:
+      label: 问题描述
+      description: 发生了什么？哪一步不符合预期？
+      placeholder: 例如：逐段学习模式下，自测全部答对后「继续」按钮仍然禁用。
+    validations:
+      required: true
+
+  - type: textarea
+    id: reproduce
+    attributes:
+      label: 复现步骤
+      description: 从干净状态开始，按顺序写出操作步骤。
+      placeholder: |
+        1. 运行 npm start
+        2. 打开 http://127.0.0.1:8788/app/
+        3. 进入「第 3 章 · 单元 xxx」
+        4. 选择答案……
+    validations:
+      required: true
+
+  - type: textarea
+    id: expected
+    attributes:
+      label: 期望行为
+      placeholder: 你认为正确的表现是什么？
+    validations:
+      required: true
+
+  - type: textarea
+    id: actual
+    attributes:
+      label: 实际行为
+      description: 有报错信息/控制台日志/服务端输出时请贴出来（先去掉密钥）。
+    validations:
+      required: true
+
+  - type: dropdown
+    id: surface
+    attributes:
+      label: 运行方式
+      description: 问题出现在哪种使用方式下？
+      options:
+        - npm start（本地服务 + 浏览器）
+        - 直接双击 app/index.html（file://）
+        - DSH 插件内嵌浮层
+        - 命令行（build / validate / test / import / new）
+        - 不确定
+    validations:
+      required: true
+
+  - type: dropdown
+    id: area
+    attributes:
+      label: 影响范围
+      multiple: true
+      options:
+        - 前端渲染 / 门禁 / 批注
+        - AI 面板 / 本地网关 / 密钥配置
+        - 读包内容（content/）
+        - 校验器 / 构建器
+        - 导入器
+        - DSH 插件
+        - 文档
+    validations:
+      required: true
+
+  - type: input
+    id: version
+    attributes:
+      label: 版本
+      description: `package.json` 的 version，或 `git log -1 --format=%h`。
+      placeholder: "0.1.0 / 提交哈希"
+
+  - type: input
+    id: environment
+    attributes:
+      label: 环境
+      description: 操作系统、Node 版本、浏览器及版本。
+      placeholder: "Windows 11 · Node 20.11.1 · Chrome 131"
+
+  - type: dropdown
+    id: ai_config
+    attributes:
+      label: AI 配置（如涉及 AI 面板）
+      description: 只选服务商类型，不要填写密钥。
+      options:
+        - 未涉及 AI
+        - USTC 网关
+        - DeepSeek 官方
+        - OpenAI
+        - Moonshot
+        - 通义千问
+        - Ollama / LM Studio
+        - 自定义 OpenAI 兼容端点
+
+  - type: textarea
+    id: extra
+    attributes:
+      label: 补充信息
+      description: 截图、录屏、相关 issue 链接等。

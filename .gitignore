@@ -1,0 +1,29 @@
+# 读包：默认**不入库**。
+# 精读材料往往含他人论文原文，不应推到公网；只保留模板骨架。
+# 想公开分享自己的读包时，在下面加一行 !content/<你的读包id>/ 即可。
+content/*
+!content/_template/
+
+# 依赖
+node_modules/
+package-lock.json
+
+# 本地配置与密钥（绝不入库）
+config.local.json
+.env
+.env.*
+
+# 生成物（app/packs.js 例外：为了 file:// 直接可用，它被提交）
+# app/packs.js  -> 提交
+*.tmp
+*.log
+
+# 系统
+.DS_Store
+Thumbs.db
+desktop.ini
+
+# 编辑器
+.vscode/
+.idea/
+*.swp

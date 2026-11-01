@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>论文精读器 · 逐段讲解 + AI 助教</title>
+<link rel="stylesheet" href="assets/katex/katex.min.css">
+<link rel="stylesheet" href="styles.css">
+</head>
+<body>
+<header class="top">
+  <div class="brand"><span id="paperTitle">论文精读器</span><small id="srcline">逐段讲解 · 批注 · 实时 AI 助教</small></div>
+  <select id="paperSel" class="papersel" title="切换读包"></select>
+  <div class="progress" title="进度：已掌握的学习单元">
+    <div class="bar"><i id="pbar"></i></div>
+    <span id="ptext">0 / 0</span>
+  </div>
+  <div class="spacer"></div>
+  <div class="seg" id="modeseg">
+    <button data-mode="study" class="on">逐段学习</button>
+    <button data-mode="browse">通读浏览</button>
+  </div>
+  <button class="btn small" id="btnFontDown" title="字号 -">A−</button>
+  <button class="btn small" id="btnFontUp" title="字号 +">A+</button>
+  <button class="btn small" id="btnTheme" title="深色/浅色">◐</button>
+  <button class="btn small" id="btnExport" title="导出批注与进度为 Markdown">导出笔记</button>
+  <button class="btn small" id="btnAI" title="AI 助教：模型与密钥设置">AI ⚙</button>
+  <button class="btn small" id="btnHelp" title="使用说明">?</button>
+</header>
+
+<main class="grid" id="grid">
+  <aside class="left"><nav id="toc"></nav></aside>
+  <section id="stage"></section>
+  <aside class="right">
+    <div class="rtabs">
+      <button data-tab="ann" class="on">批注</button>
+      <button data-tab="ai">AI 助教<span class="aidot" id="aiDot"></span></button>
+      <button data-tab="ta">速查</button>
+    </div>
+    <div class="rbody" id="rtab-ann"></div>
+    <div class="rbody ai" id="rtab-ai" style="display:none"></div>
+    <div class="rbody" id="rtab-ta" style="display:none"></div>
+  </aside>
+</main>
+
+<div id="pop"></div>
+
+<div id="modal"><div class="box">
+  <h3 id="mTitle">批注</h3>
+  <div id="mQuote" class="help" style="margin-bottom:8px"></div>
+  <div id="mInfo" class="prose" style="display:none;max-height:56vh;overflow:auto"></div>
+  <textarea id="mNote" placeholder="写下你的理解、疑问或联想……（Ctrl+Enter 保存）"></textarea>
+  <div class="mrow">
+    <button class="btn" id="mCancel">取消</button>
+    <button class="btn primary" id="mSave">保存</button>
+  </div>
+</div></div>
+
+<div id="cfg"><div class="box">
+  <h3>AI 助教设置</h3>
+  <div id="cfgStatus" class="help"></div>
+  <div class="cfgrow"><label>服务商预设</label><select id="cfgPreset"></select></div>
+  <div class="cfgrow"><label>Base URL（OpenAI 兼容）</label><input id="cfgBase" placeholder="https://api.deepseek.com/v1"></div>
+  <div class="cfgrow"><label>API Key</label><input id="cfgKey" type="password" placeholder="sk-...（只保存在本机 config.local.json）"></div>
+  <div class="cfgrow"><label>模型名</label><input id="cfgModel" placeholder="deepseek-chat"></div>
+  <div class="cfgrow"><label>温度</label><input id="cfgTemp" type="number" step="0.05" min="0" max="1.5" style="max-width:110px"><span class="help" style="margin-left:8px">讲解类任务 0.2–0.4 较稳</span></div>
+  <div class="cfgrow"><label><input id="cfgAuto" type="checkbox"> 保存批注后自动请 AI 讲解这条批注</label></div>
+  <div id="cfgModels" class="help" style="margin-top:6px"></div>
+  <div class="mrow">
+    <button class="btn" id="cfgTest">测试连接</button>
+    <button class="btn" id="cfgClose">关闭</button>
+    <button class="btn primary" id="cfgSave">保存并启用</button>
+  </div>
+</div></div>
+
+<div id="toast"></div>
+
+<script src="assets/katex/katex.min.js"></script>
+<script src="packs.js"></script>
+<script src="app.js"></script>
+</body>
+</html>

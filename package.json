@@ -1,0 +1,36 @@
+{
+  "name": "dsh-paper-reader",
+  "version": "0.1.0",
+  "private": false,
+  "description": "通用论文精读器：本地优先、离线可读、LLM 实时讲解，可作为 DSH 插件使用",
+  "type": "module",
+  "license": "MIT",
+  "author": "SFology",
+  "homepage": "https://github.com/SFology/dsh-paper-reader",
+  "repository": { "type": "git", "url": "https://github.com/SFology/dsh-paper-reader.git" },
+  "keywords": ["paper-reading", "llm", "katex", "dsh-plugin", "annotations", "socratic", "latex"],
+  "engines": { "node": ">=18.17" },
+  "bin": { "paper-reader": "./scripts/start.mjs" },
+  "scripts": {
+    "build": "node scripts/build.mjs",
+    "start": "node scripts/start.mjs",
+    "dev": "node scripts/dev.mjs",
+    "validate": "node scripts/validate.mjs",
+    "test": "node --test",
+    "pretest": "node scripts/build.mjs",
+    "import": "node packages/importer/cli.mjs",
+    "new": "node scripts/new-pack.mjs",
+    "check": "node scripts/build.mjs --check && npm test && node packages/plugin-dsh/verify.mjs"
+  },
+  "files": [
+    "app/",
+    "server/",
+    "packages/",
+    "scripts/",
+    "content/",
+    "docs/",
+    "README.md",
+    "CHANGELOG.md",
+    "LICENSE"
+  ]
+}

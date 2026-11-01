@@ -1,0 +1,5 @@
+{
+  "//": "这个标记让 Node 把本目录下的 .js 当作 CommonJS，从而能 createRequire 加载 KaTeX（根 package.json 是 type:module）。浏览器不受影响。",
+  "type": "commonjs",
+  "private": true
+}
